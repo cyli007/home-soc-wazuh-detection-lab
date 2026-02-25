@@ -1,5 +1,6 @@
 Home SOC Lab – Detection Engineering with Wazuh
 1. Project Objective
+
 This project was built to simulate a realistic Windows credential compromise scenario within a controlled home SOC environment using Wazuh SIEM.
 
 The goal was not just to generate alerts, but to understand how raw Windows authentication logs are collected, parsed, correlated, and transformed into high-confidence security detections.
