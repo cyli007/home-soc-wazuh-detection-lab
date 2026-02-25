@@ -333,7 +333,66 @@ This demonstrates effective multi-stage detection engineering and incident recon
 
 ## 6. MITRE ATT&CK Mapping
 
-(Section to be completed)
+This lab was mapped to MITRE ATT&CK techniques to align detection logic with real-world adversary behavior patterns.
+
+The objective was not only to detect events, but to understand how those events represent stages in an attack lifecycle.
+
+---
+
+### T1110 – Brute Force
+
+**Stage:** Initial Access  
+
+Repeated Windows Event ID 4625 entries indicate password guessing attempts against a valid account.
+
+The detection of multiple failed logins within a short timeframe models credential brute-force behavior.
+
+This technique was validated using built-in Wazuh brute-force detection (Rule 60204).
+
+---
+
+### T1078 – Valid Accounts
+
+**Stage:** Persistence / Defense Evasion  
+
+A successful authentication (Event ID 4624) following repeated failures indicates the attacker has obtained valid credentials.
+
+Custom Rule 100010 correlates this sequence, modeling adversary use of legitimate credentials after compromise.
+
+---
+
+### T1098 – Account Manipulation
+
+**Stage:** Privilege Escalation  
+
+Event ID 4732 confirms a user was added to the local Administrators group.
+
+This represents modification of account privileges to maintain or expand access.
+
+Custom Rule 100020 escalates this activity to CRITICAL severity.
+
+---
+
+### T1068 – Privilege Escalation
+
+Although no exploit was used, privilege escalation behavior was simulated by granting administrative rights to a compromised account.
+
+The detection logic models adversary movement from user-level access to administrative control.
+
+---
+
+### Technique Correlation Model
+
+The mapped attack progression:
+
+T1110 (Brute Force)  
+→ T1078 (Valid Accounts)  
+→ T1098 (Account Manipulation)  
+→ T1068 (Privilege Escalation)
+
+This structured mapping demonstrates how low-level authentication events translate into adversary tradecraft patterns.
+
+---
 
 ## 7. Key Learning Outcomes
 
