@@ -98,7 +98,57 @@ Service validation confirmed successful startup of:
 
 ## 3. Attack Scenario Simulated
 
-(Section to be completed)
+This lab simulates a credential-based attack against a monitored Windows endpoint to test multi-stage detection within Wazuh.
+
+The objective was to reproduce a realistic attack sequence involving authentication abuse followed by privilege escalation.
+
+---
+
+### Stage 1: Brute-Force Login Attempts
+
+Multiple failed login attempts were generated against a Windows user account to simulate password guessing behavior.
+
+**Windows Event ID: 4625 — Failed Logon**
+
+Each failed attempt produces a security event in the Windows Security log.  
+
+Repeated 4625 events within a short timeframe indicate potential brute-force activity.
+
+---
+
+### Stage 2: Successful Authentication After Repeated Failures
+
+After several failed login attempts, a successful login was performed using valid credentials.
+
+**Windows Event ID: 4624 — Successful Logon**
+
+A successful login occurring shortly after multiple failed attempts can indicate credential compromise.
+
+This stage validates correlation logic that detects suspicious login patterns rather than isolated events.
+
+---
+
+### Stage 3: Privilege Escalation via Group Modification
+
+Following successful authentication, the user account was added to the local Administrators group.
+
+**Windows Event ID: 4732 — Member Added to Security-Enabled Local Group**
+
+This simulates privilege escalation, where an attacker attempts to gain elevated permissions after gaining initial access.
+
+---
+
+### Attack Chain Summary
+
+The full attack sequence followed this progression:
+
+1. Multiple 4625 events (failed logins)
+2. One 4624 event (successful login)
+3. One 4732 event (privilege escalation)
+
+This structured progression was used to test detection logic, rule correlation, and alert escalation within the SIEM.
+
+---
 
 ## 4. Detection Engineering Approach
 
