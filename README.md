@@ -2,13 +2,13 @@
 
 ## 1. Project Objective
 
-This project was built to simulate a realistic Windows credential compromise scenario within a controlled home SOC environment using Wazuh SIEM.
+This project simulated a Windows credential compromise scenario within a controlled home SOC environment using Wazuh SIEM.
 
-The goal was not just to generate alerts, but to understand how raw Windows authentication logs are collected, parsed, correlated, and transformed into high-confidence security detections.
+The objective was to move beyond basic alert generation and examine how raw Windows authentication telemetry is collected, parsed, correlated, and elevated into high-confidence detections.
 
-The lab models attacker behavior across multiple stages, including brute-force login attempts, successful authentication after repeated failures, and privilege escalation through local administrator group modification.
+The lab modeled multi-stage adversary behavior, including brute-force authentication attempts, successful credential use following repeated failures, and privilege escalation through local administrator group modification.
 
-By engineering custom correlation rules and validating detections against raw Windows event logs, this project demonstrates practical detection engineering, rule tuning, and attack timeline reconstruction inside a SIEM.
+By implementing custom correlation rules and validating detections against raw Windows event logs, this project demonstrated structured detection engineering, severity tuning, and evidence-based attack timeline reconstruction within a SIEM environment.
 
 ---
 
@@ -33,7 +33,7 @@ Installed Components:
 - Wazuh Dashboard
 - Filebeat
 
-This machine acts as the centralized monitoring and detection engine.
+This machine acted as the centralized monitoring and detection engine.
 
 #### 2.2 Windows Endpoint (Monitored Target)
 
@@ -45,7 +45,7 @@ This machine acts as the centralized monitoring and detection engine.
 Installed Component:
 - Wazuh Agent
 
-This machine generates Windows Security Event logs that are collected and analyzed by the Wazuh server.
+This machine generated Windows Security Event logs that were collected and analyzed by the Wazuh server.
 
 ---
 
@@ -74,7 +74,7 @@ Windows Security Logs
 → Wazuh Indexer  
 → Wazuh Dashboard  
 
-This pipeline enables raw authentication events to be collected, correlated, and transformed into actionable alerts.
+This pipeline enabled raw authentication events to be collected, correlated, and transformed into actionable alerts.
 
 ---
 
@@ -98,11 +98,9 @@ Service validation confirmed successful startup of:
 
 ## 3. Attack Scenario Simulated
 
-This lab simulates a credential-based attack against a monitored Windows endpoint to test multi-stage detection within Wazuh.
+This lab simulated a credential-based attack against a monitored Windows endpoint to test multi-stage detection within Wazuh.
 
-The objective was to reproduce a realistic attack sequence involving authentication abuse followed by privilege escalation.
-
----
+The objective was to model authentication abuse followed by privilege escalation in a structured, observable sequence.
 
 ### Stage 1: Brute-Force Login Attempts
 
@@ -114,8 +112,6 @@ Each failed attempt produces a security event in the Windows Security log.
 
 Repeated 4625 events within a short timeframe indicate potential brute-force activity.
 
----
-
 ### Stage 2: Successful Authentication After Repeated Failures
 
 After several failed login attempts, a successful login was performed using valid credentials.
@@ -124,9 +120,7 @@ After several failed login attempts, a successful login was performed using vali
 
 A successful login occurring shortly after multiple failed attempts can indicate credential compromise.
 
-This stage validates correlation logic that detects suspicious login patterns rather than isolated events.
-
----
+This stage validated correlation logic that detects suspicious login patterns rather than isolated events.
 
 ### Stage 3: Privilege Escalation via Group Modification
 
@@ -134,7 +128,7 @@ Following successful authentication, the user account was added to the local Adm
 
 **Windows Event ID: 4732 — Member Added to Security-Enabled Local Group**
 
-This simulates privilege escalation, where an attacker attempts to gain elevated permissions after gaining initial access.
+This simulated privilege escalation, where an attacker attempted to gain elevated permissions after initial access.
 
 ---
 
@@ -154,8 +148,6 @@ This structured progression was used to test detection logic, rule correlation, 
 
 This section explains how raw Windows authentication events were transformed into correlated, high-confidence security detections within Wazuh.
 
----
-
 ### 4.1 Log Ingestion and Rule Evaluation
 
 Windows Security events were generated on the endpoint and collected by the Wazuh Agent.
@@ -168,9 +160,7 @@ Windows Security Logs
 → Wazuh Indexer  
 → Wazuh Dashboard  
 
-The Wazuh Manager evaluates incoming events against built-in detection rules before applying custom correlation logic.
-
----
+The Wazuh Manager evaluated incoming events against built-in detection rules before applying layered custom correlation logic.
 
 ### 4.2 Built-In Rule Detection
 
@@ -182,15 +172,9 @@ Wazuh includes default rules for Windows authentication events:
 
 These rules detect individual events but do not automatically correlate multi-stage attack behavior.
 
----
-
 ### 4.3 Custom Correlation Design
 
-To simulate realistic detection engineering, custom correlation rules were created in `local_rules.xml`.
-
-The objective was to detect attack progression rather than isolated events.
-
----
+Custom correlation rules were implemented in `local_rules.xml` to model multi-stage attack progression and reduce isolated event noise.
 
 ### 4.4 Rule 100010 – Brute Force Followed by Successful Login
 
@@ -214,9 +198,7 @@ Logic Explanation:
 * Level 14 → High severity.
 * MITRE T1078 → Valid Accounts technique.
 
-This rule correlates repeated failures with a successful login, indicating potential credential compromise.
-
----
+This rule correlated repeated failures with a successful login, indicating successful credential abuse following brute-force activity.
 
 ### 4.5 Rule 100020 – Privilege Escalation After Compromise
 
@@ -241,9 +223,7 @@ Logic Explanation:
 * Level 15 → Critical severity.
 * MITRE T1098 and T1068 → Account Manipulation and Privilege Escalation.
 
-This models full attack progression: compromise → escalation.
-
----
+This rule modeled full attack progression: compromise → escalation.
 
 ### 4.6 Alert Validation
 
@@ -253,7 +233,7 @@ Detections were validated using:
 * `alerts.json` inspection on the manager
 * Windows Event Viewer comparison
 
-This cross-validation ensured that detection logic accurately represented real authentication activity.
+This cross-validation ensured that detection logic accurately reflected underlying host telemetry.
 
 ---
 
@@ -263,17 +243,13 @@ This section documents the chronological reconstruction of the simulated attack 
 
 The objective was to validate that detection rules accurately reflected real system activity.
 
----
-
 ### 5.1 Timeline of Events
 
-| Time | Event ID | Description | Detection Outcome |
-|---------------|----------|------------|------------------|
-| 10:47:56 | 4625 | Multiple failed login attempts begin | Built-in brute-force rule triggered (60204) |
-| 10:48:20 | 4624 | Successful login recorded | Custom Rule 100010 triggered |
-| 10:48:30 | 4732 | User added to local Administrators group | Custom Rule 100020 triggered (CRITICAL) |
-
----
+| Time     | Event ID | Description                          | Detection Outcome                           |
+| -------- | -------- | ------------------------------------ | ------------------------------------------- |
+| 10:47:56 | 4625     | Multiple failed login attempts begin | Built-in brute-force rule triggered (60204) |
+| 10:48:20 | 4624     | Successful login recorded            | Custom Rule 100010 triggered                |
+| 10:48:30 | 4732     | User added to Administrators group   | Custom Rule 100020 triggered (CRITICAL)     |
 
 ### 5.2 Stage 1 – Brute-Force Activity
 
@@ -283,8 +259,6 @@ Wazuh correlated these events using the built-in brute-force detection rule (602
 
 This confirmed abnormal authentication failure patterns.
 
----
-
 ### 5.3 Stage 2 – Credential Compromise Confirmation
 
 A successful authentication (Event ID 4624) was observed shortly after repeated failures.
@@ -293,17 +267,13 @@ Custom Rule 100010 triggered, correlating the brute-force activity with a succes
 
 This elevated the alert severity to reflect likely credential compromise.
 
----
-
 ### 5.4 Stage 3 – Privilege Escalation
 
 Event ID 4732 confirmed the compromised account was added to the local Administrators group.
 
 Custom Rule 100020 triggered a CRITICAL alert.
 
-This validated full attack progression from initial access to privilege escalation.
-
----
+This validated end-to-end attack progression from initial access to privilege escalation.
 
 ### 5.5 Cross-Validation Sources
 
@@ -314,9 +284,7 @@ The attack chain was verified using multiple data sources:
 - `/var/ossec/logs/alerts/alerts.json`
 - Alert severity escalation in correlation view
 
-Cross-validation ensured that detection logic aligned precisely with raw host telemetry.
-
----
+Cross-validation confirmed temporal and logical consistency between host telemetry and SIEM alerts.
 
 ### 5.6 Final Attack Chain Validation
 
@@ -327,7 +295,7 @@ Brute Force (4625)
 → Privilege Escalation (4732)  
 → SIEM Correlated Critical Alert  
 
-This demonstrates effective multi-stage detection engineering and incident reconstruction.
+The correlation model reduced false positives by enforcing sequential behavioral dependencies rather than isolated event triggers.
 
 ---
 
@@ -337,19 +305,15 @@ This lab was mapped to MITRE ATT&CK techniques to align detection logic with rea
 
 The objective was not only to detect events, but to understand how those events represent stages in an attack lifecycle.
 
----
-
 ### T1110 – Brute Force
 
 **Stage:** Initial Access  
 
 Repeated Windows Event ID 4625 entries indicate password guessing attempts against a valid account.
 
-The detection of multiple failed logins within a short timeframe models credential brute-force behavior.
+Detection of multiple failed logins within a defined timeframe modeled adversary credential brute-force behavior.
 
 This technique was validated using built-in Wazuh brute-force detection (Rule 60204).
-
----
 
 ### T1078 – Valid Accounts
 
@@ -357,9 +321,7 @@ This technique was validated using built-in Wazuh brute-force detection (Rule 60
 
 A successful authentication (Event ID 4624) following repeated failures indicates the attacker has obtained valid credentials.
 
-Custom Rule 100010 correlates this sequence, modeling adversary use of legitimate credentials after compromise.
-
----
+Custom Rule 100010 correlated this sequence, modeling adversary use of legitimate credentials after compromise.
 
 ### T1098 – Account Manipulation
 
@@ -369,15 +331,13 @@ Event ID 4732 confirms a user was added to the local Administrators group.
 
 This represents modification of account privileges to maintain or expand access.
 
-Custom Rule 100020 escalates this activity to CRITICAL severity.
-
----
+Custom Rule 100020 escalated this activity to CRITICAL severity.
 
 ### T1068 – Privilege Escalation
 
 Although no exploit was used, privilege escalation behavior was simulated by granting administrative rights to a compromised account.
 
-The detection logic models adversary movement from user-level access to administrative control.
+The technique mapping reflects behavioral privilege escalation rather than exploitation-based escalation.
 
 ---
 
@@ -396,13 +356,11 @@ This structured mapping demonstrates how low-level authentication events transla
 
 ## 7. Key Learning Outcomes
 
-This lab provided hands-on experience in detection engineering beyond basic SIEM configuration.
-
----
+This lab provided practical exposure to structured detection engineering beyond basic SIEM configuration.
 
 ### 7.1 Understanding Telemetry vs Detection
 
-Raw logs do not equal alerts.
+Raw logs represent telemetry; detection requires contextual correlation.
 
 Security events become meaningful only when correlated using structured rule logic.
 
@@ -413,8 +371,6 @@ This project reinforced the difference between:
 - Multi-stage correlation
 - Context-based alert escalation
 
----
-
 ### 7.2 Correlation Reduces Noise
 
 Individual failed logins are common and may generate noise.
@@ -423,11 +379,9 @@ By correlating:
 
 Failed logins → Successful login → Privilege escalation
 
-the detection confidence significantly increased.
+the detection confidence increased while alert noise decreased.
 
 This models real SOC tuning practices.
-
----
 
 ### 7.3 Importance of Validation
 
@@ -438,8 +392,6 @@ Alerts were validated against:
 - Dashboard timeline
 
 This reinforced the importance of cross-verification rather than trusting a single data source.
-
----
 
 ### 7.4 Attack Progression Thinking
 
@@ -453,31 +405,21 @@ This reflects real-world detection engineering where behavior patterns matter mo
 
 This lab can be expanded to simulate more advanced adversary behavior and detection strategies.
 
----
-
 ### 8.1 Low-and-Slow Brute Force Detection
 
 Implement correlation logic to detect distributed or slow brute-force attempts across longer timeframes.
-
----
 
 ### 8.2 Lateral Movement Simulation
 
 Simulate remote logon types (e.g., RDP logons) and detect abnormal logon patterns across hosts.
 
----
-
 ### 8.3 Logon Type Analysis
 
 Enhance detection rules by analyzing specific Windows logon types (e.g., interactive vs network logons).
 
----
-
 ### 8.4 Baseline Modeling
 
 Implement baseline behavior analysis to differentiate between normal administrative activity and suspicious privilege changes.
-
----
 
 ### 8.5 Detection-as-Code Workflow
 
