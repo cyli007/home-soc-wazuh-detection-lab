@@ -259,7 +259,77 @@ This cross-validation ensured that detection logic accurately represented real a
 
 ## 5. Attack Timeline Reconstruction
 
-(Section to be completed)
+This section documents the chronological reconstruction of the simulated attack using raw Windows logs and Wazuh alerts.
+
+The objective was to validate that detection rules accurately reflected real system activity.
+
+---
+
+### 5.1 Timeline of Events
+
+| Time (Example) | Event ID | Description | Detection Outcome |
+|---------------|----------|------------|------------------|
+| 10:47:56 | 4625 | Multiple failed login attempts begin | Built-in brute-force rule triggered (60204) |
+| 10:48:20 | 4624 | Successful login recorded | Custom Rule 100010 triggered |
+| 10:48:30 | 4732 | User added to local Administrators group | Custom Rule 100020 triggered (CRITICAL) |
+
+---
+
+### 5.2 Stage 1 – Brute-Force Activity
+
+Repeated Event ID 4625 entries were observed in Windows Event Viewer.
+
+Wazuh correlated these events using the built-in brute-force detection rule (60204).
+
+This confirmed abnormal authentication failure patterns.
+
+---
+
+### 5.3 Stage 2 – Credential Compromise Confirmation
+
+A successful authentication (Event ID 4624) was observed shortly after repeated failures.
+
+Custom Rule 100010 triggered, correlating the brute-force activity with a successful login.
+
+This elevated the alert severity to reflect likely credential compromise.
+
+---
+
+### 5.4 Stage 3 – Privilege Escalation
+
+Event ID 4732 confirmed the compromised account was added to the local Administrators group.
+
+Custom Rule 100020 triggered a CRITICAL alert.
+
+This validated full attack progression from initial access to privilege escalation.
+
+---
+
+### 5.5 Cross-Validation Sources
+
+The attack chain was verified using multiple data sources:
+
+- Windows Event Viewer (raw logs)
+- Wazuh Dashboard timeline
+- `/var/ossec/logs/alerts/alerts.json`
+- Alert severity escalation in correlation view
+
+Cross-validation ensured that detection logic aligned precisely with raw host telemetry.
+
+---
+
+### 5.6 Final Attack Chain Validation
+
+The confirmed progression was:
+
+Brute Force (4625)  
+→ Successful Login (4624)  
+→ Privilege Escalation (4732)  
+→ SIEM Correlated Critical Alert  
+
+This demonstrates effective multi-stage detection engineering and incident reconstruction.
+
+---
 
 ## 6. MITRE ATT&CK Mapping
 
