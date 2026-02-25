@@ -267,7 +267,7 @@ The objective was to validate that detection rules accurately reflected real sys
 
 ### 5.1 Timeline of Events
 
-| Time (Example) | Event ID | Description | Detection Outcome |
+| Time | Event ID | Description | Detection Outcome |
 |---------------|----------|------------|------------------|
 | 10:47:56 | 4625 | Multiple failed login attempts begin | Built-in brute-force rule triggered (60204) |
 | 10:48:20 | 4624 | Successful login recorded | Custom Rule 100010 triggered |
