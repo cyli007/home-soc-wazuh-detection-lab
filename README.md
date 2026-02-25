@@ -396,8 +396,89 @@ This structured mapping demonstrates how low-level authentication events transla
 
 ## 7. Key Learning Outcomes
 
-(Section to be completed)
+This lab provided hands-on experience in detection engineering beyond basic SIEM configuration.
+
+---
+
+### 7.1 Understanding Telemetry vs Detection
+
+Raw logs do not equal alerts.
+
+Security events become meaningful only when correlated using structured rule logic.
+
+This project reinforced the difference between:
+
+- Event generation
+- Rule evaluation
+- Multi-stage correlation
+- Context-based alert escalation
+
+---
+
+### 7.2 Correlation Reduces Noise
+
+Individual failed logins are common and may generate noise.
+
+By correlating:
+
+Failed logins → Successful login → Privilege escalation
+
+the detection confidence significantly increased.
+
+This models real SOC tuning practices.
+
+---
+
+### 7.3 Importance of Validation
+
+Alerts were validated against:
+
+- Windows Event Viewer
+- `alerts.json`
+- Dashboard timeline
+
+This reinforced the importance of cross-verification rather than trusting a single data source.
+
+---
+
+### 7.4 Attack Progression Thinking
+
+Instead of detecting isolated events, the lab focused on modeling adversary progression.
+
+This reflects real-world detection engineering where behavior patterns matter more than single log entries.
+
+---
 
 ## 8. Future Improvements
 
-(Section to be completed)
+This lab can be expanded to simulate more advanced adversary behavior and detection strategies.
+
+---
+
+### 8.1 Low-and-Slow Brute Force Detection
+
+Implement correlation logic to detect distributed or slow brute-force attempts across longer timeframes.
+
+---
+
+### 8.2 Lateral Movement Simulation
+
+Simulate remote logon types (e.g., RDP logons) and detect abnormal logon patterns across hosts.
+
+---
+
+### 8.3 Logon Type Analysis
+
+Enhance detection rules by analyzing specific Windows logon types (e.g., interactive vs network logons).
+
+---
+
+### 8.4 Baseline Modeling
+
+Implement baseline behavior analysis to differentiate between normal administrative activity and suspicious privilege changes.
+
+---
+
+### 8.5 Detection-as-Code Workflow
+
+Store detection rules in version-controlled directories and simulate structured detection lifecycle management.
