@@ -1,0 +1,92 @@
+{
+  "_index": "wazuh-alerts-4.x-2026.03.07",
+  "_id": "vGEhx5wBVDsoj0EFSE4r",
+  "_score": 1,
+  "_source": {
+    "agent": {
+      "ip": "192.168.29.250",
+      "name": "agentwin",
+      "id": "007"
+    },
+    "manager": {
+      "name": "soc101"
+    },
+    "data": {
+      "win": {
+        "eventdata": {
+          "subjectLogonId": "0x6c303",
+          "targetUserName": "Administrators",
+          "memberSid": "S-1-5-21-3098116810-744665549-2443619660-1007",
+          "subjectUserSid": "S-1-5-21-3098116810-744665549-2443619660-1001",
+          "subjectDomainName": "DESKTOP-6J96G96",
+          "targetDomainName": "Builtin",
+          "targetSid": "S-1-5-32-544",
+          "subjectUserName": "winvm"
+        },
+        "system": {
+          "eventID": "4732",
+          "keywords": "0x8020000000000000",
+          "providerGuid": "{54849625-5478-4994-a5ba-3e3b0328c30d}",
+          "level": "0",
+          "channel": "Security",
+          "opcode": "0",
+          "message": "\"A member was added to a security-enabled local group.\r\n\r\nSubject:\r\n\tSecurity ID:\t\tS-1-5-21-3098116810-744665549-2443619660-1001\r\n\tAccount Name:\t\twinvm\r\n\tAccount Domain:\t\tDESKTOP-6J96G96\r\n\tLogon ID:\t\t0x6C303\r\n\r\nMember:\r\n\tSecurity ID:\t\tS-1-5-21-3098116810-744665549-2443619660-1007\r\n\tAccount Name:\t\t-\r\n\r\nGroup:\r\n\tSecurity ID:\t\tS-1-5-32-544\r\n\tGroup Name:\t\tAdministrators\r\n\tGroup Domain:\t\tBuiltin\r\n\r\nAdditional Information:\r\n\tPrivileges:\t\t-\"",
+          "version": "0",
+          "systemTime": "2026-03-07T07:09:23.6035699Z",
+          "eventRecordID": "55013",
+          "threadID": "10784",
+          "computer": "DESKTOP-6J96G96",
+          "task": "13826",
+          "processID": "900",
+          "severityValue": "AUDIT_SUCCESS",
+          "providerName": "Microsoft-Windows-Security-Auditing"
+        }
+      }
+    },
+    "rule": {
+      "firedtimes": 1,
+      "mail": true,
+      "level": 15,
+      "description": "CRITICAL: Compromised account escalated to local administrator",
+      "groups": [
+        "windows",
+        "credential_compromise"
+      ],
+      "mitre": {
+        "technique": [
+          "Account Manipulation",
+          "Exploitation for Privilege Escalation"
+        ],
+        "id": [
+          "T1098",
+          "T1068"
+        ],
+        "tactic": [
+          "Persistence",
+          "Privilege Escalation"
+        ]
+      },
+      "id": "100020",
+      "frequency": 2
+    },
+    "decoder": {
+      "name": "windows_eventchannel"
+    },
+    "full_log": "{\"win\":{\"system\":{\"providerName\":\"Microsoft-Windows-Security-Auditing\",\"providerGuid\":\"{54849625-5478-4994-a5ba-3e3b0328c30d}\",\"eventID\":\"4732\",\"version\":\"0\",\"level\":\"0\",\"task\":\"13826\",\"opcode\":\"0\",\"keywords\":\"0x8020000000000000\",\"systemTime\":\"2026-03-07T07:09:23.6035699Z\",\"eventRecordID\":\"55013\",\"processID\":\"900\",\"threadID\":\"10784\",\"channel\":\"Security\",\"computer\":\"DESKTOP-6J96G96\",\"severityValue\":\"AUDIT_SUCCESS\",\"message\":\"\\\"A member was added to a security-enabled local group.\\r\\n\\r\\nSubject:\\r\\n\\tSecurity ID:\\t\\tS-1-5-21-3098116810-744665549-2443619660-1001\\r\\n\\tAccount Name:\\t\\twinvm\\r\\n\\tAccount Domain:\\t\\tDESKTOP-6J96G96\\r\\n\\tLogon ID:\\t\\t0x6C303\\r\\n\\r\\nMember:\\r\\n\\tSecurity ID:\\t\\tS-1-5-21-3098116810-744665549-2443619660-1007\\r\\n\\tAccount Name:\\t\\t-\\r\\n\\r\\nGroup:\\r\\n\\tSecurity ID:\\t\\tS-1-5-32-544\\r\\n\\tGroup Name:\\t\\tAdministrators\\r\\n\\tGroup Domain:\\t\\tBuiltin\\r\\n\\r\\nAdditional Information:\\r\\n\\tPrivileges:\\t\\t-\\\"\"},\"eventdata\":{\"memberSid\":\"S-1-5-21-3098116810-744665549-2443619660-1007\",\"targetUserName\":\"Administrators\",\"targetDomainName\":\"Builtin\",\"targetSid\":\"S-1-5-32-544\",\"subjectUserSid\":\"S-1-5-21-3098116810-744665549-2443619660-1001\",\"subjectUserName\":\"winvm\",\"subjectDomainName\":\"DESKTOP-6J96G96\",\"subjectLogonId\":\"0x6c303\"}}}",
+    "input": {
+      "type": "log"
+    },
+    "@timestamp": "2026-03-07T07:09:24.532Z",
+    "location": "EventChannel",
+    "id": "1772867364.5838418",
+    "timestamp": "2026-03-07T12:39:24.532+0530"
+  },
+  "fields": {
+    "timestamp": [
+      "2026-03-07T07:09:24.532Z"
+    ],
+    "@timestamp": [
+      "2026-03-07T07:09:24.532Z"
+    ]
+  }
+}
