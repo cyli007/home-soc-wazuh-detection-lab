@@ -1,0 +1,26 @@
+<!-- Custom Wazuh detection rules for credential compromise -->
+
+<group name="windows,credential_compromise">
+
+  <!-- Rule 100010: Detect brute-force followed by successful login -->
+  <rule id="100010" level="14">
+    <if_matched_sid>60204</if_matched_sid>
+    <if_sid>60118</if_sid>
+    <description>POSSIBLE ACCOUNT COMPROMISE: brute force followed by successful login</description>
+    <mitre>
+      <id>T1078</id>
+    </mitre>
+  </rule>
+
+  <!-- Rule 100020: Detect privilege escalation after compromise -->
+  <rule id="100020" level="15">
+    <if_sid>60154</if_sid>
+    <if_matched_sid>100010</if_matched_sid>
+    <description>CRITICAL: Compromised account escalated to local administrator</description>
+    <mitre>
+      <id>T1098</id>
+      <id>T1068</id>
+    </mitre>
+  </rule>
+
+</group>
