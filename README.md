@@ -342,3 +342,127 @@ This lab provided practical experience in:
 * Mapping detections to MITRE ATT&CK techniques
 
 The project demonstrates how authentication telemetry can be transformed into meaningful detections through structured correlation logic.
+
+---
+
+# 12. Incident Analysis & Response
+
+## Incident Summary
+
+**Incident Type:** Credential Compromise with Privilege Escalation  
+**Severity:** Critical  
+
+A multi-stage attack was detected involving brute-force authentication attempts, followed by a successful login and unauthorized privilege escalation. The correlated alerts indicate a high-confidence compromise of a user account.
+
+---
+
+## Triage & Initial Assessment
+
+The alert was triggered by a correlation rule detecting:
+
+- Multiple failed login attempts (Event ID 4625)
+- A subsequent successful login (Event ID 4624)
+- Followed by privilege escalation activity (Event ID 4732)
+
+At the triage stage, this pattern was immediately suspicious because:
+
+- A successful login following repeated failures is a strong indicator of brute-force success  
+- The rapid transition to privilege escalation suggests malicious intent rather than normal user behavior  
+
+**Initial Classification:** High Priority — Likely True Positive  
+
+---
+
+## Investigation & Analysis
+
+The alert was validated through structured investigation:
+
+### 1. Authentication Pattern Analysis
+- Reviewed Event ID 4625 logs to confirm repeated failed login attempts  
+- Verified frequency and timing to rule out normal user error  
+
+### 2. Successful Login Verification
+- Correlated Event ID 4624 with prior failed attempts  
+- Confirmed login occurred shortly after brute-force sequence  
+
+### 3. Privilege Escalation Confirmation
+- Analyzed Event ID 4732 (user added to Administrators group)  
+- Verified the same user account was involved in previous authentication events  
+
+### 4. Timeline Correlation
+Reconstructed event sequence using timestamps:
+
+```
+
+Failed Logins → Successful Login → Privilege Escalation
+
+```
+
+This confirmed a clear attacker progression.
+
+---
+
+## Why This is a True Positive
+
+This activity was classified as a confirmed compromise because:
+
+- Sequential failed logins followed by success strongly indicate credential compromise  
+- Immediate privilege escalation is not typical of legitimate user behavior  
+- Events are tightly correlated in time and context  
+- Multiple independent indicators (4625, 4624, 4732) support the same conclusion  
+
+**Conclusion:** Confirmed True Positive  
+
+---
+
+## Impact Assessment
+
+- Compromised account gained **administrator privileges**  
+- Potential full control over the system  
+- High risk of:
+  - Lateral movement  
+  - Persistence mechanisms  
+  - Data exfiltration  
+  - Further privilege abuse  
+
+**Impact Level:** Critical  
+
+---
+
+## Response Actions (Recommended)
+
+To contain and remediate the incident:
+
+- Disable or lock the compromised account immediately  
+- Reset credentials and enforce strong password policies  
+- Enable Multi-Factor Authentication (MFA)  
+- Review recent login activity across systems  
+- Audit privileged group memberships  
+- Investigate for lateral movement across the network  
+- Strengthen alerting and correlation thresholds  
+
+---
+
+## Detection Improvement Opportunities
+
+During analysis, the following improvements were identified:
+
+- Implement account lockout thresholds to prevent brute-force success  
+- Add source IP or geolocation anomaly detection  
+- Enhance correlation rules with time-based thresholds  
+- Integrate additional telemetry (e.g., Sysmon, network logs)  
+
+---
+
+## SOC Workflow Mapping
+
+This project demonstrates a complete Tier 1 SOC workflow:
+
+1. Alert Detection  
+2. Triage & Prioritization  
+3. Investigation & Correlation  
+4. Validation (True Positive Confirmation)  
+5. Impact Assessment  
+6. Response & Mitigation  
+
+This reflects real-world SOC operations for handling credential-based attacks.
