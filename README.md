@@ -1,10 +1,10 @@
 # Wazuh SIEM Lab – Authentication Monitoring & Alert Correlation
 
-This project demonstrates detection of a real-world attack chain using Wazuh SIEM:
+This project demonstrates detection of a simulated multi-stage authentication attack scenario using Wazuh SIEM:
 
 Brute Force → Successful Login → Privilege Escalation
 
-Custom correlation rules were engineered to detect and escalate this multi-stage attack using Windows Security Event Logs (4625, 4624, 4732).
+Custom correlation rules were created to detect and correlate this multi-stage attack sequence using Windows Security Event Logs (4625, 4624, 4732).
 
 This lab showcases hands-on SOC analyst skills including alert triage, log correlation, and incident timeline reconstruction.
 
@@ -16,13 +16,27 @@ This lab showcases hands-on SOC analyst skills including alert triage, log corre
 - Multi-stage attack correlation using Wazuh SIEM rules
 - MITRE ATT&CK mapping (T1110, T1078, T1098, T1068)
 
+## Environment Disclaimer
+
+This project was developed in a simulated SOC lab environment for cybersecurity learning and hands-on SIEM practice using Wazuh and Windows Security Event telemetry.
+
+## Skills Demonstrated
+
+- SIEM Monitoring
+- Authentication Attack Detection
+- Alert Correlation
+- Windows Event Log Analysis
+- MITRE ATT&CK Mapping
+- Detection Rule Tuning
+- Attack Timeline Reconstruction
+
 ## Overview
 
-This project demonstrates a simulated credential compromise scenario within a **home Security Operations Center (SOC) lab** using **Wazuh SIEM**.
+This project demonstrates a simulated credential compromise scenario within a **simulated SOC lab environment** using **Wazuh SIEM**.
 
-The lab explores how raw Windows authentication telemetry can be collected, parsed, correlated, and transformed into high-confidence security detections.
+The lab explores how raw Windows authentication telemetry can be collected, parsed, correlated, and transformed into meaningful security detections through event correlation.
 
-The simulated attack models a realistic adversary progression:
+The simulated attack models a common authentication attack workflow:
 
 1. Brute-force authentication attempts  
 2. Successful login using compromised credentials  
@@ -30,7 +44,7 @@ The simulated attack models a realistic adversary progression:
 
 Custom Wazuh correlation rules were implemented to detect this multi-stage attack chain and escalate alerts appropriately. The generated alerts were validated against raw Windows Security Event logs to confirm detection accuracy.
 
-This project demonstrates practical **detection engineering**, including telemetry analysis, correlation rule design, alert validation, and attack timeline reconstruction.
+This project demonstrates practical SIEM monitoring, authentication event correlation, and attack detection workflows using Windows Security Event telemetry.
 
 ---
 
@@ -92,7 +106,7 @@ The agent forwards Windows Security Event logs to the Wazuh manager.
 # 2. SOC Lab Architecture
 
 
-            Home SOC Lab Architecture
+            Simulated SOC Lab Architecture
 
     +-------------------------------------+
     |          Windows 11 Endpoint        |
@@ -190,7 +204,7 @@ Service validation confirmed successful startup of:
 
 A credential-based attack scenario was simulated to test detection capabilities.
 
-The attack followed a realistic adversary workflow.
+The attack followed a simulated authentication attack workflow.
 
 ```
 
@@ -206,7 +220,7 @@ The attack followed a realistic adversary workflow.
 
 ```
 
-This sequence represents a common attack progression:
+This sequence represents a common authentication attack progression:
 
 1. Password brute force
 2. Credential compromise
@@ -214,7 +228,7 @@ This sequence represents a common attack progression:
 
 ---
 
-# 7. Detection Engineering
+# 7. Alert Correlation & Detection Logic
 
 Raw authentication events were transformed into correlated security detections using **custom Wazuh rules**.
 
@@ -290,7 +304,7 @@ Evidence for the simulated attack was gathered from multiple sources:
 * Alert JSON event view
 * Correlation rule alerts
 
-This multi-source validation ensured detection accuracy.
+This multi-source validation helped confirm detection consistency across telemetry and alerts.
 
 ---
 
@@ -313,10 +327,10 @@ Credential Compromise
     ↓
 Privilege Escalation
     ↓
-Critical SIEM Alert
+Correlated Security Alert
 ```
 
-This confirms that the correlation rules accurately modeled attacker behavior.
+This confirms that the correlation rules successfully correlated the simulated attack sequence.
 
 ---
 
@@ -347,7 +361,24 @@ This mapping demonstrates how low-level authentication logs translate into adver
 
 ---
 
-# 11. Key Learning Outcomes
+# 11. Challenges Faced
+
+- Reduced noisy authentication alerts during testing
+- Tuned correlation timing windows for improved detection accuracy
+- Validated Windows audit policy settings for event visibility
+- Troubleshot Wazuh agent connectivity and log forwarding issues
+
+---
+
+# 12. Lessons Learned
+
+- Importance of correlating multiple authentication events instead of relying on isolated alerts
+- Better understanding of Windows Security Event telemetry and alert tuning workflows
+- Learned how SIEM correlation improves visibility into multi-stage authentication attacks
+
+---
+
+# 13. Key Learning Outcomes
 
 This lab provided practical experience in:
 
@@ -365,44 +396,44 @@ The project demonstrates how authentication telemetry can be transformed into me
 
 ## Lab Setup
 
-![Windows VM](https://github.com/TheCipherNova/home-soc-wazuh-detection-lab/raw/main/screenshots/01.windows-vm.png)
+![Windows VM](https://github.com/TheCipherNova/wazuh-soc-detection-lab/raw/main/screenshots/01.windows-vm.png)
 
-![Ubuntu VM](https://github.com/TheCipherNova/home-soc-wazuh-detection-lab/raw/main/screenshots/02.ubuntu-vm.png)
+![Ubuntu VM](https://github.com/TheCipherNova/wazuh-soc-detection-lab/raw/main/screenshots/02.ubuntu-vm.png)
 
-![Windows IP](https://github.com/TheCipherNova/home-soc-wazuh-detection-lab/raw/main/screenshots/03.windows-ip.png)
+![Windows IP](https://github.com/TheCipherNova/wazuh-soc-detection-lab/raw/main/screenshots/03.windows-ip.png)
 
-![Ubuntu IP](https://github.com/TheCipherNova/home-soc-wazuh-detection-lab/raw/main/screenshots/04.ubuntu-ip.png)
+![Ubuntu IP](https://github.com/TheCipherNova/wazuh-soc-detection-lab/raw/main/screenshots/04.ubuntu-ip.png)
 
-![VM Connectivity](https://github.com/TheCipherNova/home-soc-wazuh-detection-lab/raw/main/screenshots/05.vms-connectivity.png)
+![VM Connectivity](https://github.com/TheCipherNova/wazuh-soc-detection-lab/raw/main/screenshots/05.vms-connectivity.png)
 
 ---
 
 ## SIEM Deployment
 
-![Wazuh Manager Status](https://github.com/TheCipherNova/home-soc-wazuh-detection-lab/raw/main/screenshots/06.wazuh-manager-status.png)
+![Wazuh Manager Status](https://github.com/TheCipherNova/wazuh-soc-detection-lab/raw/main/screenshots/06.wazuh-manager-status.png)
 
-![Indexer & Dashboard](https://github.com/TheCipherNova/home-soc-wazuh-detection-lab/raw/main/screenshots/07.indexer-dashboard-status.png)
+![Indexer & Dashboard](https://github.com/TheCipherNova/wazuh-soc-detection-lab/raw/main/screenshots/07.indexer-dashboard-status.png)
 
-![Agent Connected](https://github.com/TheCipherNova/home-soc-wazuh-detection-lab/raw/main/screenshots/08.wazuh-agent-active.png)
+![Agent Connected](https://github.com/TheCipherNova/wazuh-soc-detection-lab/raw/main/screenshots/08.wazuh-agent-active.png)
 
 ---
 
 ## Detection Rules
 
-![Custom Detection Rules](https://github.com/TheCipherNova/home-soc-wazuh-detection-lab/raw/main/screenshots/09.detection-rule.png)
+![Custom Detection Rules](https://github.com/TheCipherNova/wazuh-soc-detection-lab/raw/main/screenshots/09.detection-rule.png)
 
 ---
 
 ## Windows Event Logs
 
-![Windows Event Viewer](https://github.com/TheCipherNova/home-soc-wazuh-detection-lab/raw/main/screenshots/10.windows-event-viewer.png)
+![Windows Event Viewer](https://github.com/TheCipherNova/wazuh-soc-detection-lab/raw/main/screenshots/10.windows-event-viewer.png)
 
-![Event IDs](https://github.com/TheCipherNova/home-soc-wazuh-detection-lab/raw/main/screenshots/11.event-ids.png)
+![Event IDs](https://github.com/TheCipherNova/wazuh-soc-detection-lab/raw/main/screenshots/11.event-ids.png)
 
 ---
 
 ## Alerts Triggered
 
-![Rule 100010 - Credential Compromise](https://github.com/TheCipherNova/home-soc-wazuh-detection-lab/raw/main/screenshots/12.ruleid-100010.png)
+![Rule 100010 - Credential Compromise](https://github.com/TheCipherNova/wazuh-soc-detection-lab/raw/main/screenshots/12.ruleid-100010.png)
 
-![Rule 100020 - Privilege Escalation](https://github.com/TheCipherNova/home-soc-wazuh-detection-lab/raw/main/screenshots/13.ruleid-100020.png)
+![Rule 100020 - Privilege Escalation](https://github.com/TheCipherNova/wazuh-soc-detection-lab/raw/main/screenshots/13.ruleid-100020.png)
