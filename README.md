@@ -1,4 +1,4 @@
-# SOC Detection Lab: Credential Compromise & Privilege Escalation
+# Wazuh SIEM Lab – Authentication Monitoring & Alert Correlation
 
 This project demonstrates detection of a real-world attack chain using Wazuh SIEM:
 
